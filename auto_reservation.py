@@ -1,5 +1,6 @@
 from argparse import Action
 import enum
+from lib2to3.pgen2.token import OP
 from tkinter.filedialog import Open
 from selenium import webdriver
 import logging
@@ -11,6 +12,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+import datetime
+
+now = datetime.datetime.now()
 
 # Logの設定
 logger=logging.getLogger(__name__)
@@ -22,29 +26,77 @@ h1.setFormatter(formatter)
 logger.addHandler(h1)
 
 
-def check_open(day="2022-04-18", time="15:30"):
+# 日時選択・空き状況確認関数
+def check_open(driver, day="2022-04-20", time="15:30"):
+    time = time.split(':')[0] + ":" + format(str(int(time.split(':')[1]) - 30), "0>2")
     day = "'" + day + "'"
     time = "'" + time + "-" + "'"
     print("day", day)
     print("time", time)
+    logger.debug('-- day : {} --'.format(day))
+    logger.debug('-- time : {} --'.format(time))
     # 予約受付開始前の状態を確認
-    not_open_path = "//td[@data-name_message='お電話にてお問い合わせください']"
-    NotOpenElement = driver.find_elements_by_xpath(not_open_path)
-    if len(NotOpenElement) < 0:
-        logger.debug('-- 予約受付開始前です。 --')
-        print("予約受け付け開始時間前です。")
-        return None, not_open_path
+    # not_open_path = "//td[@data-name_message='お電話にてお問い合わせください']"
+    # NotOpenElement = driver.find_elements_by_xpath(not_open_path)
+    # if len(NotOpenElement) < 0:
+    #     return None, not_open_path
 
-    else:
+    # else:
+    for mark in ["◎", "○", "△"]:
+        mark = "'" + mark + "'"
+        print(mark)
+        logger.debug("-- mark : {} --".format(mark))
         # open_path = "//tr[th[@data-sys_time = {0}]]/td[input[@value = {1}]]/span[contains(text(), '◎')]".format(time, day)
-        open_path = "//tr[th[contains(text(), {0})]]/td[input[@value = {1}]]/span[contains(text(), '◎')]".format(time, day)
+        open_path = "//tr[th[contains(text(), {0})]]/td[input[@value = {1}]]/span[contains(text(), {2})]".format(time, day, mark)
         logger.debug('-- open path = {} --'.format(open_path))
+        print('-- open path = {} --'.format(open_path))
         OpenElement = driver.find_elements_by_xpath(open_path)
-        logger.debug('-- 予約を進めます --')
-        print("予約を進めます。")
-        # open_path = open_path.replace("/span[contains(text(), '◎')]", "")
-        # open_path = "//tr[th[contains(text(), {0})]]/td/input[@value = {1}]".format(time, day)
-        return OpenElement, open_path
+        if len(OpenElement) > 0:
+            logger.debug('-- 予約を進めます --')
+            print("予約を進めます。")
+            print(OpenElement)
+            return OpenElement, open_path
+        else:
+            if mark == "'△'":
+                logger.debug('-- 予約できません。 --')
+                print("予約できません。")
+                OpenElement = None
+                print(OpenElement)
+                return OpenElement, open_path
+            else:
+                continue
+    # open_path = open_path.replace("/span[contains(text(), '◎')]", "")
+    # open_path = "//tr[th[contains(text(), {0})]]/td/input[@value = {1}]".format(time, day)
+
+def select_object(driver, name="こむぎ", age=20):
+    name = ""
+    if name != "":
+        logger.debug('-- 指名あり --')
+        print('-- 指名あり --')
+        name = "'" + name + "(" + str(age) + "歳" + ")" + "'"
+        print(name)
+        logger.debug('-- name : {} --'.format(name))
+        element_object_id = driver.find_elements_by_xpath("//a[strong[contains(text(), {0})]]".format(name))
+        if len(element_object_id) > 0:
+            logger.debug('-- 対象が見つかりました。 --')
+            print("-- 対象が見つかりました。 --")
+            object_id = str(element_object_id[0].get_attribute("href").split('/')[-1].split('-')[-1])
+            logger.debug('-- object_id : {} --'.format(object_id))
+            element_select_object = driver.find_elements_by_xpath("//a[input[@value = {}]]".format(object_id))
+            logger.debug("-- element_select_object : {} --".format(element_select_object))
+            return element_select_object
+        
+        else:
+            logger.debug('-- 対象が見つかりませんでした。 --')
+            print("-- 対象が見つかりました。 --")
+            return None
+    else:
+        logger.debug('-- 指名なし --')
+        print("-- 指名なし --")
+        element_object_id = driver.find_elements_by_xpath("//a[contains(text(), ' 指名なし（フリー予約）                                ')]")
+        logger.debug('-- element_object_id : {} --'.format(element_object_id))
+        return element_object_id
+    
 
 
 
@@ -96,15 +148,22 @@ driver.switch_to.frame(iframe)
 # check_open関数で予約がopenになっているか確認
 actions = ActionChains(driver)
 logger.debug("-- check_open関数 --")
-element, xpath = check_open()
+element, xpath = check_open(driver=driver)
 print("element : ", element[0].text, " xpath : ", xpath)
 if element != None:
     result = driver.find_element_by_xpath(xpath)
     actions.move_to_element(result)
     sleep(1)
     result.click()
-    sleep(10)
-    
+    sleep(5)
+# element == Noneやfind_object == Noneの場合の処理は？
+
+logger.debug('-- select_object関数 --')
+find_object = select_object(driver=driver)
+print(find_object)
+if find_object != None:
+    find_object[0].click()
+    sleep(5)
 
 
 # BeautifulSoupでtable要素を取得するパターン（今回は使わない）
