@@ -27,7 +27,7 @@ logger.addHandler(h1)
 
 
 # 日時選択・空き状況確認関数
-def check_open(driver, day="2022-04-20", time="15:30"):
+def check_open(driver, day, time):
     time = time.split(':')[0] + ":" + format(str(int(time.split(':')[1]) - 30), "0>2")
     day = "'" + day + "'"
     time = "'" + time + "-" + "'"
@@ -68,7 +68,7 @@ def check_open(driver, day="2022-04-20", time="15:30"):
     # open_path = open_path.replace("/span[contains(text(), '◎')]", "")
     # open_path = "//tr[th[contains(text(), {0})]]/td/input[@value = {1}]".format(time, day)
 
-def select_object(driver, name="こむぎ", age=20):
+def select_object(driver, name, age):
     name = ""
     if name != "":
         logger.debug('-- 指名あり --')
@@ -97,8 +97,23 @@ def select_object(driver, name="こむぎ", age=20):
         logger.debug('-- element_object_id : {} --'.format(element_object_id))
         return element_object_id
     
+def create_time_range(start, end):
+    start = datetime.datetime.strptime(start, "%H:%M")
+    end = datetime.datetime.strptime(end, "%H:%M")
+    minutes = int((end - start) / datetime.timedelta(minutes=30))
+    print(start.minute)
+    print(end)
+    print(minutes)
+    list = []
+    for minute in range(0, minutes):
+        start = start + datetime.timedelta(minutes=30)
+        print(start)
+        list.append(format(str(start.hour), "0>2") + ":" + format(str(start.minute), "0>2"))
+        if start == end:
+            print(list)
+            return list
 
-
+    
 
 # def open_hour(name, start="6", end="24"):
 #     logger.debug("-- 営業時間設定 --")
@@ -110,60 +125,72 @@ def select_object(driver, name="こむぎ", age=20):
 
 #     print(minutes)
 
+objects = [{"name":"こむぎ", "age":20}, {"name":"さくら", "age":19}]
+day = "2022-04-22"
+time = {"start":"15:00", "end":"20:00"}
+booked = ""
+while booked != "Done":
+    times = create_time_range(start=time["start"], end=time["end"])
+    for object in objects:
+        for time in times:
+            logger.debug('-- WebDriverの設定 --')
+            # try:
+            # DriverManager : https://jpdebug.com/p/2615980
+            # Chromeの場合
+            from webdriver_manager.chrome import ChromeDriverManager
+            driver = webdriver.Chrome(ChromeDriverManager().install())
+            driver.get('https://www.cityheaven.net/kanagawa/A1403/A140301/afterschool/A6ShopReservation/') # お店予約ページ
+            # driver.get('https://www.cityheaven.net/kanagawa/A1403/A140301/afterschool/') # お店トップページ
 
+            # 参考サイト: https://tetoblog.org/2021/05/disney-scraping/
+            # 参考サイト２: https://qiita.com/memakura/items/20a02161fa7e18d8a693
 
-logger.debug('-- WebDriverの設定 --')
-# try:
-# DriverManager : https://jpdebug.com/p/2615980
-# Chromeの場合
-from webdriver_manager.chrome import ChromeDriverManager
-driver = webdriver.Chrome(ChromeDriverManager().install())
-driver.get('https://www.cityheaven.net/kanagawa/A1403/A140301/afterschool/A6ShopReservation/') # お店予約ページ
-# driver.get('https://www.cityheaven.net/kanagawa/A1403/A140301/afterschool/') # お店トップページ
+            # 待機時間の設定
+            logger.debug('-- 待機時間の設定 --')
+            wait = WebDriverWait(driver, 20) # 最大待機時間 10 秒
+            wait.until(EC.visibility_of_all_elements_located)
+            sleep(10)
 
-# 参考サイト: https://tetoblog.org/2021/05/disney-scraping/
-# 参考サイト２: https://qiita.com/memakura/items/20a02161fa7e18d8a693
+            # ページ要素の取得
+            logger.debug('-- ページ要素の取得 --')
+            # button = driver.find_element_by_id('reserve_btn')
+            # button.click()
+            wait.until(EC.visibility_of_all_elements_located)
 
-# 待機時間の設定
-logger.debug('-- 待機時間の設定 --')
-wait = WebDriverWait(driver, 10) # 最大待機時間 10 秒
-wait.until(EC.visibility_of_all_elements_located)
-# sleep(10)
+            # サイトにiframeが使われているときは、iframeに出入りする必要がある。
+            # https://qiita.com/hondy12345/items/c7359c300c73afd11d76
+            # ここでiframeに入る
+            logger.debug('-- enter iframe --')
+            iframe = driver.find_element_by_id('pcreserveiframe')
+            driver.switch_to.frame(iframe)
+            # iframeから抜けるコード
+            # driver.switch_to.default_content()
 
-# ページ要素の取得
-logger.debug('-- ページ要素の取得 --')
-# button = driver.find_element_by_id('reserve_btn')
-# button.click()
-wait.until(EC.visibility_of_all_elements_located)
+            # check_open関数で予約がopenになっているか確認
+            actions = ActionChains(driver)
+            logger.debug("-- check_open関数 --")
+            element, xpath = check_open(driver=driver, day=day, time=time)
+            print("element : ", element[0].text, " xpath : ", xpath)
+            if element != None:
+                result = driver.find_element_by_xpath(xpath)
+                actions.move_to_element(result)
+                sleep(1)
+                result.click()
+                sleep(5)
+            else:
+                driver.close()
 
-# サイトにiframeが使われているときは、iframeに出入りする必要がある。
-# https://qiita.com/hondy12345/items/c7359c300c73afd11d76
-# ここでiframeに入る
-logger.debug('-- enter iframe --')
-iframe = driver.find_element_by_id('pcreserveiframe')
-driver.switch_to.frame(iframe)
-# iframeから抜けるコード
-# driver.switch_to.default_content()
+            # element == Noneやfind_object == Noneの場合の処理は？
 
-# check_open関数で予約がopenになっているか確認
-actions = ActionChains(driver)
-logger.debug("-- check_open関数 --")
-element, xpath = check_open(driver=driver)
-print("element : ", element[0].text, " xpath : ", xpath)
-if element != None:
-    result = driver.find_element_by_xpath(xpath)
-    actions.move_to_element(result)
-    sleep(1)
-    result.click()
-    sleep(5)
-# element == Noneやfind_object == Noneの場合の処理は？
-
-logger.debug('-- select_object関数 --')
-find_object = select_object(driver=driver)
-print(find_object)
-if find_object != None:
-    find_object[0].click()
-    sleep(5)
+            logger.debug('-- select_object関数 --')
+            find_object = select_object(driver=driver, name=object["name"], age=object["age"])
+            print(find_object)
+            if find_object != None:
+                find_object[0].click()
+                sleep(5)
+                booked = "Done"
+            elif find_object == None or find_object == []:
+                driver.close()
 
 
 # BeautifulSoupでtable要素を取得するパターン（今回は使わない）
