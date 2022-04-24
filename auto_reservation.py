@@ -13,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import datetime
+from webdriver_manager.chrome import ChromeDriverManager
 
 now = datetime.datetime.now()
 
@@ -28,13 +29,22 @@ logger.addHandler(h1)
 
 # 日時選択・空き状況確認関数
 def check_open(driver, day, time):
-    time = time.split(':')[0] + ":" + format(str(int(time.split(':')[1]) - 30), "0>2")
-    day = "'" + day + "'"
-    time = "'" + time + "-" + "'"
-    print("day", day)
-    print("time", time)
+
     logger.debug('-- day : {} --'.format(day))
     logger.debug('-- time : {} --'.format(time))
+    
+    # time = time.split(":")
+    # if int(time[1]) != 0:
+    #     time = time[0] + ":" + format(str(int(time[1]) - 30), "0>2")
+    # else:
+    #     time = format(str(int(time[0]) -1), "0>2") + ":" + format(str(int(time[1]) + 30), "0>2")
+    day = "'" + day + "'"
+    time = "'" + time + "-" + "'"
+    # time = "'" + time + "'"
+    print("day", day)
+    print("time", time)
+    # logger.debug('-- day 2: {} --'.format(day))
+    # logger.debug('-- time 2: {} --'.format(time))
     # 予約受付開始前の状態を確認
     # not_open_path = "//td[@data-name_message='お電話にてお問い合わせください']"
     # NotOpenElement = driver.find_elements_by_xpath(not_open_path)
@@ -47,7 +57,7 @@ def check_open(driver, day, time):
         print(mark)
         logger.debug("-- mark : {} --".format(mark))
         # open_path = "//tr[th[@data-sys_time = {0}]]/td[input[@value = {1}]]/span[contains(text(), '◎')]".format(time, day)
-        open_path = "//tr[th[contains(text(), {0})]]/td[input[@value = {1}]]/span[contains(text(), {2})]".format(time, day, mark)
+        open_path = "//tr[th[@data-sys_time={0}]]/td[input[@value = {1}]]/span[contains(text(), {2})]".format(time, day, mark)
         logger.debug('-- open path = {} --'.format(open_path))
         print('-- open path = {} --'.format(open_path))
         OpenElement = driver.find_elements_by_xpath(open_path)
@@ -69,7 +79,6 @@ def check_open(driver, day, time):
     # open_path = "//tr[th[contains(text(), {0})]]/td/input[@value = {1}]".format(time, day)
 
 def select_object(driver, name, age):
-    name = ""
     if name != "":
         logger.debug('-- 指名あり --')
         print('-- 指名あり --')
@@ -88,7 +97,7 @@ def select_object(driver, name, age):
         
         else:
             logger.debug('-- 対象が見つかりませんでした。 --')
-            print("-- 対象が見つかりました。 --")
+            print("-- 対象が見つかりませんでした。 --")
             return None
     else:
         logger.debug('-- 指名なし --')
@@ -98,22 +107,38 @@ def select_object(driver, name, age):
         return element_object_id
     
 def create_time_range(start, end):
+    list = []
+    list.append(start)
     start = datetime.datetime.strptime(start, "%H:%M")
     end = datetime.datetime.strptime(end, "%H:%M")
     minutes = int((end - start) / datetime.timedelta(minutes=30))
     print(start.minute)
     print(end)
     print(minutes)
-    list = []
     for minute in range(0, minutes):
         start = start + datetime.timedelta(minutes=30)
         print(start)
         list.append(format(str(start.hour), "0>2") + ":" + format(str(start.minute), "0>2"))
         if start == end:
             print(list)
+            logger.debug("-- time-list -- {}".format(list))
             return list
 
+
+def select_course(driver, hour):
+    hour = "'" + str(hour) + "分" + "'"
+    hour_path = "//div[@class='row']/div[div[div[span[strong[contains(text(), {0})]]]]]/div[@class='right']/span[input[value='選択する']]".format(hour)
+    print(hour)
+    print(hour_path)
+    logger.debug('-- hour -- {}'.format(hour))
+    logger.debug('-- hour path -- {}'.format(hour_path))
+    selected_hour = driver.find_elements_by_xpath(hour_path)
+    if len(selected_hour) > 0:
+        selected_hour[0].click()
     
+    else:
+        driver.close()
+
 
 # def open_hour(name, start="6", end="24"):
 #     logger.debug("-- 営業時間設定 --")
@@ -125,19 +150,19 @@ def create_time_range(start, end):
 
 #     print(minutes)
 
-objects = [{"name":"こむぎ", "age":20}, {"name":"さくら", "age":19}]
-day = "2022-04-22"
-time = {"start":"15:00", "end":"20:00"}
+objects = [{"name":"えの", "age":20}, {"name":"ひめか", "age":19}, {"name":"こむぎ", "age":20}, {"name":"さくら", "age":19}]
+day = "2022-04-24"
+time = {"start":"15:00", "end":"17:00"}
+times = create_time_range(start=time["start"], end=time["end"])
 booked = ""
 while booked != "Done":
-    times = create_time_range(start=time["start"], end=time["end"])
     for object in objects:
-        for time in times:
+        logger.debug("-- onject -- {}".format(object))
+        for i in range(len(times)):
             logger.debug('-- WebDriverの設定 --')
             # try:
             # DriverManager : https://jpdebug.com/p/2615980
             # Chromeの場合
-            from webdriver_manager.chrome import ChromeDriverManager
             driver = webdriver.Chrome(ChromeDriverManager().install())
             driver.get('https://www.cityheaven.net/kanagawa/A1403/A140301/afterschool/A6ShopReservation/') # お店予約ページ
             # driver.get('https://www.cityheaven.net/kanagawa/A1403/A140301/afterschool/') # お店トップページ
@@ -169,28 +194,60 @@ while booked != "Done":
             # check_open関数で予約がopenになっているか確認
             actions = ActionChains(driver)
             logger.debug("-- check_open関数 --")
-            element, xpath = check_open(driver=driver, day=day, time=time)
-            print("element : ", element[0].text, " xpath : ", xpath)
+            element, xpath = check_open(driver=driver, day=day, time=times[int(i)])
+            print("elements : ", element, " xpath : ", xpath)
+            logger.debug('-- elements : ', element, " xpath : ", xpath, " --")
             if element != None:
                 result = driver.find_element_by_xpath(xpath)
                 actions.move_to_element(result)
                 sleep(1)
                 result.click()
                 sleep(5)
+                wait.until(EC.visibility_of_all_elements_located)
+
+                selected_time = driver.find_elements_by_xpath("//span[@class='disp-datetime']/div[@class='disp-time']")[0].text
+                print(selected_time)
+                logger.debug('-- selected time -- {}'.format(selected_time))
+                if selected_time != times[int(i)]:
+                    if datetime.datetime.strptime(selected_time, "%H:%M") > datetime.datetime.strptime(str(times[int(i)]), "%H:%M"):
+                        driver.find_elements_by_xpath("//a[@class='arrow-prev-btn']")[0].click()
+                    else:
+                        driver.find_elements_by_xpath("//a[@class='arrow-next-btn']")[0].click()
+                    selected_time_2 = driver.find_elements_by_xpath("//span[@class='disp-datetime']/div[@class='disp-time']")[0].text
+                    print(selected_time_2)
+                    logger.debug('-- selected time_2 -- {}'.format(selected_time_2))
+                # element == Noneやfind_object == Noneの場合の処理は？
+                wait.until(EC.visibility_of_all_elements_located)
+                sleep(5)
+
+
+
+                logger.debug('-- select_object関数 --')
+                find_object = select_object(driver=driver, name=object["name"], age=object["age"])
+                print(find_object)
+                if find_object != None:
+                    find_object[0].click()
+                    wait.until(EC.visibility_of_all_elements_located)
+                    sleep(5)
+
+                    select_course(driver=driver, hour=50)
+
+                    booked = "Done"
+                    driver.close()
+                    print('Complete')
+                    logger.debug('Complete')
+                        
+                elif find_object == None or find_object == []:
+                    driver.close()
+                    continue
+
+
             else:
                 driver.close()
+                continue
 
-            # element == Noneやfind_object == Noneの場合の処理は？
 
-            logger.debug('-- select_object関数 --')
-            find_object = select_object(driver=driver, name=object["name"], age=object["age"])
-            print(find_object)
-            if find_object != None:
-                find_object[0].click()
-                sleep(5)
-                booked = "Done"
-            elif find_object == None or find_object == []:
-                driver.close()
+
 
 
 # BeautifulSoupでtable要素を取得するパターン（今回は使わない）
@@ -210,7 +267,6 @@ while booked != "Done":
 
 
 
-driver.close()
 # except Exception:
 #     print(Exception)
 #     driver.close()
