@@ -215,3 +215,162 @@
 2022-04-25 00:31:13,431 - DEBUG - -- 待機時間の設定 --
 2022-04-25 00:31:23,432 - DEBUG - -- ページ要素の取得 --
 2022-04-25 00:31:23,435 - DEBUG - -- enter iframe --
+2022-04-25 07:30:35,313 - DEBUG - -- time-list -- ['17:00']
+2022-04-25 07:30:35,329 - DEBUG - -- onject -- {'name': 'みつば', 'age': 21}
+2022-04-25 07:30:35,329 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:31:27,216 - DEBUG - -- 待機時間の設定 --
+2022-04-25 07:31:37,226 - DEBUG - -- ページ要素の取得 --
+2022-04-25 07:31:37,229 - DEBUG - -- enter iframe --
+2022-04-25 07:31:37,292 - DEBUG - -- check_open関数 --
+2022-04-25 07:31:37,293 - DEBUG - -- day : 2022-04-25 --
+2022-04-25 07:31:37,293 - DEBUG - -- time : 17:00 --
+2022-04-25 07:31:37,295 - DEBUG - -- mark : '◎' --
+2022-04-25 07:31:37,296 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-25']]/span[contains(text(), '◎')] --
+2022-04-25 07:31:37,335 - DEBUG - -- mark : '○' --
+2022-04-25 07:31:37,336 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-25']]/span[contains(text(), '○')] --
+2022-04-25 07:31:37,359 - DEBUG - -- mark : '△' --
+2022-04-25 07:31:37,360 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-25']]/span[contains(text(), '△')] --
+2022-04-25 07:31:37,390 - DEBUG - -- 予約できません。 --
+2022-04-25 07:31:37,827 - DEBUG - -- onject -- {'name': 'さく', 'age': 20}
+2022-04-25 07:31:37,828 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:31:51,459 - DEBUG - -- time-list -- ['17:00']
+2022-04-25 07:31:51,463 - DEBUG - -- onject -- {'name': 'みつば', 'age': 21}
+2022-04-25 07:31:51,464 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:32:41,690 - DEBUG - -- 待機時間の設定 --
+2022-04-25 07:32:51,698 - DEBUG - -- ページ要素の取得 --
+2022-04-25 07:32:51,703 - DEBUG - -- enter iframe --
+2022-04-25 07:32:51,785 - DEBUG - -- check_open関数 --
+2022-04-25 07:32:51,786 - DEBUG - -- day : 2022-04-26 --
+2022-04-25 07:32:51,787 - DEBUG - -- time : 17:00 --
+2022-04-25 07:32:51,788 - DEBUG - -- mark : '◎' --
+2022-04-25 07:32:51,789 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-26']]/span[contains(text(), '◎')] --
+2022-04-25 07:32:51,815 - DEBUG - -- 予約を進めます --
+2022-04-25 07:32:58,060 - DEBUG - -- select_object関数 --
+2022-04-25 07:32:58,156 - DEBUG - -- selected time -- 17:30
+2022-04-25 07:33:01,710 - DEBUG - -- selected time_2 -- 17:00
+2022-04-25 07:33:01,711 - DEBUG - -- 指名あり --
+2022-04-25 07:33:01,714 - DEBUG - -- name : 'みつば(21歳)' --
+2022-04-25 07:33:01,734 - DEBUG - -- 対象が見つかりませんでした。 --
+2022-04-25 07:33:01,736 - DEBUG - -- select_course関数 --
+2022-04-25 07:33:01,737 - DEBUG - -- enter iframe --
+2022-04-25 07:33:36,816 - DEBUG - -- time-list -- ['17:00']
+2022-04-25 07:33:36,820 - DEBUG - -- onject -- {'name': 'みつば', 'age': 21}
+2022-04-25 07:33:36,820 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:34:29,558 - DEBUG - -- 待機時間の設定 --
+2022-04-25 07:34:39,576 - DEBUG - -- ページ要素の取得 --
+2022-04-25 07:34:39,577 - DEBUG - -- enter iframe --
+2022-04-25 07:34:39,619 - DEBUG - -- check_open関数 --
+2022-04-25 07:34:39,620 - DEBUG - -- day : 2022-04-26 --
+2022-04-25 07:34:39,621 - DEBUG - -- time : 17:00 --
+2022-04-25 07:34:39,622 - DEBUG - -- mark : '◎' --
+2022-04-25 07:34:39,623 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-26']]/span[contains(text(), '◎')] --
+2022-04-25 07:34:39,644 - DEBUG - -- 予約を進めます --
+2022-04-25 07:34:45,871 - DEBUG - -- select_object関数 --
+2022-04-25 07:34:45,972 - DEBUG - -- selected time -- 17:30
+2022-04-25 07:34:48,694 - DEBUG - -- selected time_2 -- 17:00
+2022-04-25 07:34:48,695 - DEBUG - -- 指名あり --
+2022-04-25 07:34:48,696 - DEBUG - -- name : 'みつば(21歳)' --
+2022-04-25 07:34:48,712 - DEBUG - -- 対象が見つかりませんでした。 --
+2022-04-25 07:34:48,714 - DEBUG - -- select_course関数 --
+2022-04-25 07:34:48,816 - DEBUG - -- onject -- {'name': 'さく', 'age': 20}
+2022-04-25 07:34:48,819 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:35:36,251 - DEBUG - -- 待機時間の設定 --
+2022-04-25 07:35:46,257 - DEBUG - -- ページ要素の取得 --
+2022-04-25 07:35:46,258 - DEBUG - -- enter iframe --
+2022-04-25 07:35:46,298 - DEBUG - -- check_open関数 --
+2022-04-25 07:35:46,299 - DEBUG - -- day : 2022-04-26 --
+2022-04-25 07:35:46,299 - DEBUG - -- time : 17:00 --
+2022-04-25 07:35:46,301 - DEBUG - -- mark : '◎' --
+2022-04-25 07:35:46,302 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-26']]/span[contains(text(), '◎')] --
+2022-04-25 07:35:46,321 - DEBUG - -- 予約を進めます --
+2022-04-25 07:35:52,550 - DEBUG - -- select_object関数 --
+2022-04-25 07:35:52,600 - DEBUG - -- selected time -- 17:30
+2022-04-25 07:35:55,816 - DEBUG - -- selected time_2 -- 17:00
+2022-04-25 07:35:55,820 - DEBUG - -- 指名あり --
+2022-04-25 07:35:55,825 - DEBUG - -- name : 'さく(20歳)' --
+2022-04-25 07:35:55,879 - DEBUG - -- 対象が見つかりました。 --
+2022-04-25 07:35:55,908 - DEBUG - -- object_id : 37825116 --
+2022-04-25 07:35:55,939 - DEBUG - -- element_select_object : [<selenium.webdriver.remote.webelement.WebElement (session="8e904c65057c8505cfdc73abc03c5f07", element="e2c23581-d3b3-47b6-9c99-b7fc013d69d5")>] --
+2022-04-25 07:35:55,941 - DEBUG - -- select_course関数 --
+2022-04-25 07:35:56,158 - DEBUG - -- hour -- '50分'
+2022-04-25 07:35:56,159 - DEBUG - -- hour path -- //div[span[strong[contains(text(), '50分')]]]/following-sibling::div/span[input[@value='選択する']]
+2022-04-25 07:35:56,185 - DEBUG - -- course not found --
+2022-04-25 07:35:56,288 - DEBUG - -- onject -- {'name': 'えの', 'age': 20}
+2022-04-25 07:35:56,289 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:37:32,967 - DEBUG - -- time-list -- ['17:00']
+2022-04-25 07:37:32,970 - DEBUG - -- onject -- {'name': 'ちなつ', 'age': 19}
+2022-04-25 07:37:32,971 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:38:26,193 - DEBUG - -- 待機時間の設定 --
+2022-04-25 07:38:36,206 - DEBUG - -- ページ要素の取得 --
+2022-04-25 07:38:36,211 - DEBUG - -- enter iframe --
+2022-04-25 07:38:36,315 - DEBUG - -- check_open関数 --
+2022-04-25 07:38:36,316 - DEBUG - -- day : 2022-04-26 --
+2022-04-25 07:38:36,318 - DEBUG - -- time : 17:00 --
+2022-04-25 07:38:36,321 - DEBUG - -- mark : '◎' --
+2022-04-25 07:38:36,322 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-26']]/span[contains(text(), '◎')] --
+2022-04-25 07:38:36,347 - DEBUG - -- 予約を進めます --
+2022-04-25 07:38:42,538 - DEBUG - -- select_object関数 --
+2022-04-25 07:38:42,588 - DEBUG - -- selected time -- 17:30
+2022-04-25 07:38:46,174 - DEBUG - -- selected time_2 -- 17:00
+2022-04-25 07:38:46,175 - DEBUG - -- 指名あり --
+2022-04-25 07:38:46,177 - DEBUG - -- name : 'ちなつ(19歳)' --
+2022-04-25 07:38:46,191 - DEBUG - -- 対象が見つかりました。 --
+2022-04-25 07:38:46,203 - DEBUG - -- object_id : 39950495 --
+2022-04-25 07:38:46,218 - DEBUG - -- element_select_object : [<selenium.webdriver.remote.webelement.WebElement (session="b37c2d6dbeae5ed4ab9bd51a4f768443", element="82739eb9-054f-495f-ae32-f42e134c28f7")>] --
+2022-04-25 07:38:46,219 - DEBUG - -- select_course関数 --
+2022-04-25 07:38:46,343 - DEBUG - -- hour -- '50分'
+2022-04-25 07:38:46,345 - DEBUG - -- hour path -- //div[span[strong[contains(text(), '50分')]]]/following-sibling::div/span[input[@value='選択する']]
+2022-04-25 07:38:46,372 - DEBUG - -- course not found --
+2022-04-25 07:38:46,692 - DEBUG - -- onject -- {'name': 'みつば', 'age': 21}
+2022-04-25 07:38:46,693 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:41:42,820 - DEBUG - -- time-list -- ['17:00']
+2022-04-25 07:41:42,824 - DEBUG - -- onject -- {'name': 'ちなつ', 'age': 19}
+2022-04-25 07:41:42,825 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:42:35,321 - DEBUG - -- 待機時間の設定 --
+2022-04-25 07:42:45,339 - DEBUG - -- ページ要素の取得 --
+2022-04-25 07:42:45,341 - DEBUG - -- enter iframe --
+2022-04-25 07:42:45,380 - DEBUG - -- check_open関数 --
+2022-04-25 07:42:45,380 - DEBUG - -- day : 2022-04-26 --
+2022-04-25 07:42:45,381 - DEBUG - -- time : 17:00 --
+2022-04-25 07:42:45,382 - DEBUG - -- mark : '◎' --
+2022-04-25 07:42:45,383 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-26']]/span[contains(text(), '◎')] --
+2022-04-25 07:42:45,401 - DEBUG - -- 予約を進めます --
+2022-04-25 07:42:51,682 - DEBUG - -- select_object関数 --
+2022-04-25 07:42:51,795 - DEBUG - -- selected time -- 17:30
+2022-04-25 07:42:55,532 - DEBUG - -- selected time_2 -- 17:00
+2022-04-25 07:42:55,533 - DEBUG - -- 指名あり --
+2022-04-25 07:42:55,534 - DEBUG - -- name : 'ちなつ(19歳)' --
+2022-04-25 07:42:55,551 - DEBUG - -- 対象が見つかりました。 --
+2022-04-25 07:42:55,563 - DEBUG - -- object_id : 39950495 --
+2022-04-25 07:42:55,578 - DEBUG - -- element_select_object : [<selenium.webdriver.remote.webelement.WebElement (session="bdbcc5793e51fda86da2926a8b514ad9", element="321e3a65-c837-4b92-a2bb-a8643c97f46c")>] --
+2022-04-25 07:42:55,579 - DEBUG - -- select_course関数 --
+2022-04-25 07:42:55,706 - DEBUG - -- hour -- '50分'
+2022-04-25 07:42:55,708 - DEBUG - -- hour path -- //div[span[strong[contains(text(), '50分')]]]/following-sibling::div/span[input[@value='選択する']]
+2022-04-25 07:42:55,735 - DEBUG - -- course not found --
+2022-04-25 07:42:55,837 - DEBUG - -- onject -- {'name': 'みつば', 'age': 21}
+2022-04-25 07:42:55,841 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:43:57,803 - DEBUG - -- time-list -- ['17:00']
+2022-04-25 07:43:57,807 - DEBUG - -- onject -- {'name': 'ちなつ', 'age': 19}
+2022-04-25 07:43:57,808 - DEBUG - -- WebDriverの設定 --
+2022-04-25 07:44:48,713 - DEBUG - -- 待機時間の設定 --
+2022-04-25 07:44:58,719 - DEBUG - -- ページ要素の取得 --
+2022-04-25 07:44:58,720 - DEBUG - -- enter iframe --
+2022-04-25 07:44:58,757 - DEBUG - -- check_open関数 --
+2022-04-25 07:44:58,758 - DEBUG - -- day : 2022-04-26 --
+2022-04-25 07:44:58,759 - DEBUG - -- time : 17:00 --
+2022-04-25 07:44:58,761 - DEBUG - -- mark : '◎' --
+2022-04-25 07:44:58,762 - DEBUG - -- open path = //tr[th[@data-sys_time='17:00-']]/td[input[@value = '2022-04-26']]/span[contains(text(), '◎')] --
+2022-04-25 07:44:58,776 - DEBUG - -- 予約を進めます --
+2022-04-25 07:45:04,990 - DEBUG - -- select_object関数 --
+2022-04-25 07:45:05,133 - DEBUG - -- selected time -- 17:30
+2022-04-25 07:45:07,970 - DEBUG - -- selected time_2 -- 17:00
+2022-04-25 07:45:07,972 - DEBUG - -- 指名あり --
+2022-04-25 07:45:07,975 - DEBUG - -- name : 'ちなつ(19歳)' --
+2022-04-25 07:45:08,010 - DEBUG - -- 対象が見つかりました。 --
+2022-04-25 07:45:08,033 - DEBUG - -- object_id : 39950495 --
+2022-04-25 07:45:08,064 - DEBUG - -- element_select_object : [<selenium.webdriver.remote.webelement.WebElement (session="1dfa1e598aa3ebf084dfffd8258830b5", element="1f1959bc-0c6d-4c40-a97c-0812b3929826")>] --
+2022-04-25 07:45:08,067 - DEBUG - -- select_course関数 --
+2022-04-25 07:45:10,264 - DEBUG - -- hour -- '50分'
+2022-04-25 07:45:10,265 - DEBUG - -- hour path -- //div[span[strong[contains(text(), '50分')]]]/following-sibling::div/span[input[@value='選択する']]
+2022-04-25 07:45:19,657 - DEBUG - -- Course Select Completed --
+2022-04-25 07:45:31,330 - DEBUG - -- onject -- {'name': 'みつば', 'age': 21}

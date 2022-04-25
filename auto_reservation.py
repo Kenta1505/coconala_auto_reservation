@@ -148,15 +148,20 @@ def create_time_range(start, end):
 
 def select_course(driver, wait, hour, find_object):
 
+    # logger.debug('-- enter iframe --')
+    # iframe = driver.find_element_by_id('pcreserveiframe')
+    # driver.switch_to.frame(iframe)
+
     if find_object != None:
 
         find_object[0].click()
 
         wait.until(EC.visibility_of_all_elements_located)
+        sleep(2)
         
         hour = "'" + str(hour) + "分" + "'"
-        # hour_path = "//div[span[strong[contains(text(), {0})]]]/following-sibling::div/span[input[@value='選択する']]".format(hour)
-        hour_path = "//div[span[strong[contains(text(), {0})]]]/following-sibling::div/span[@class='select_btn']".format(hour)
+        hour_path = "//div[span[strong[contains(text(), {0})]]]/following-sibling::div/span[input[@value='選択する']]".format(hour)
+        # hour_path = "//div[span[strong[contains(text(), {0})]]]/following-sibling::div/span[@class='select_btn']".format(hour)
         print(hour)
         print("hour_path :",hour_path)
         logger.debug('-- hour -- {}'.format(hour))
@@ -201,8 +206,8 @@ def accept_terms(driver):
 #     print(minutes)
 
 # 事前情報の設定
-objects = [{"name":"みつば", "age":21}, {"name":"さく", "age":20}, {"name":"えの", "age":20}, {"name":"ひめか", "age":19}, {"name":"こむぎ", "age":20}, {"name":"さくら", "age":19}]
-day = "2022-04-25"
+objects = [{"name":"ちなつ", "age":19}, {"name":"みつば", "age":21}, {"name":"さく", "age":20}, {"name":"えの", "age":20}, {"name":"ひめか", "age":19}, {"name":"こむぎ", "age":20}, {"name":"さくら", "age":19}]
+day = "2022-04-26"
 time = {"start":"17:00", "end":"17:00"}
 times = create_time_range(start=time["start"], end=time["end"])
 hour = 50
