@@ -78,7 +78,23 @@ def check_open(driver, day, time):
     # open_path = open_path.replace("/span[contains(text(), '◎')]", "")
     # open_path = "//tr[th[contains(text(), {0})]]/td/input[@value = {1}]".format(time, day)
 
-def select_object(driver, name, age):
+def select_object(driver, wait, name, age):
+
+    selected_time = driver.find_elements_by_xpath("//span[@class='disp-datetime']/div[@class='disp-time']")[0].text
+    print(selected_time)
+    logger.debug('-- selected time -- {}'.format(selected_time))
+    if selected_time != times[int(i)]: # 希望時間と選択時間が一致しない場合
+        if datetime.datetime.strptime(selected_time, "%H:%M") > datetime.datetime.strptime(str(times[int(i)]), "%H:%M"):
+            # 選択時間の方が後の場合
+            driver.find_elements_by_xpath("//a[@class='arrow-prev-btn']")[0].click()
+        else:
+            driver.find_elements_by_xpath("//a[@class='arrow-next-btn']")[0].click()
+        selected_time_2 = driver.find_elements_by_xpath("//span[@class='disp-datetime']/div[@class='disp-time']")[0].text
+        print(selected_time_2)
+        logger.debug('-- selected time_2 -- {}'.format(selected_time_2))
+
+    wait.until(EC.visibility_of_all_elements_located)
+
     if name != "":
         logger.debug('-- 指名あり --')
         print('-- 指名あり --')
@@ -111,13 +127,18 @@ def create_time_range(start, end):
     list.append(start)
     start = datetime.datetime.strptime(start, "%H:%M")
     end = datetime.datetime.strptime(end, "%H:%M")
+    if start == end or end == None:
+        list = [format(str(start.hour), "0>2") + ":" + format(str(start.minute), "0>2")]
+        logger.debug('-- time-list -- {}'.format(list))
+        return list
+
     minutes = int((end - start) / datetime.timedelta(minutes=30))
     print(start.minute)
     print(end)
     print(minutes)
     for minute in range(0, minutes):
         start = start + datetime.timedelta(minutes=30)
-        print(start)
+        print("start : ", start)
         list.append(format(str(start.hour), "0>2") + ":" + format(str(start.minute), "0>2"))
         if start == end:
             print(list)
@@ -125,20 +146,49 @@ def create_time_range(start, end):
             return list
 
 
-def select_course(driver, hour):
-    hour = "'" + str(hour) + "分" + "'"
-    hour_path = "//div[@class='row']/div[div[div[span[strong[contains(text(), {0})]]]]]/div[@class='right']/span[input[value='選択する']]".format(hour)
-    print(hour)
-    print(hour_path)
-    logger.debug('-- hour -- {}'.format(hour))
-    logger.debug('-- hour path -- {}'.format(hour_path))
-    selected_hour = driver.find_elements_by_xpath(hour_path)
-    if len(selected_hour) > 0:
-        selected_hour[0].click()
-    
-    else:
-        driver.close()
+def select_course(driver, wait, hour, find_object):
 
+    if find_object != None:
+
+        find_object[0].click()
+
+        wait.until(EC.visibility_of_all_elements_located)
+        
+        hour = "'" + str(hour) + "分" + "'"
+        # hour_path = "//div[span[strong[contains(text(), {0})]]]/following-sibling::div/span[input[@value='選択する']]".format(hour)
+        hour_path = "//div[span[strong[contains(text(), {0})]]]/following-sibling::div/span[@class='select_btn']".format(hour)
+        print(hour)
+        print("hour_path :",hour_path)
+        logger.debug('-- hour -- {}'.format(hour))
+        logger.debug('-- hour path -- {}'.format(hour_path))
+        selected_hour = driver.find_elements_by_xpath(hour_path)
+        if len(selected_hour) > 0:
+
+            return selected_hour
+
+        else:
+            logger.debug('-- course not found --')
+            return None
+
+def login(driver, id, password):
+
+    if len(driver.find_elements_by_xpath("//ul[@id='login_item']")) > 0:
+
+        # ID/メールアドレス
+        driver.find_elements_by_xpath("//ul[@id='login_item']/li/input[@id='user']")[0].send_keys(id)
+
+        # Password
+        driver.find_elements_by_xpath("//ul[@id='login_item']/li/input[@id='pass']")[0].send_keys(password)
+
+        #ログインボタン
+        driver.find_elements_by_xpath("//div[@class='loginButton']")[0].click()
+
+
+def accept_terms(driver):
+
+    if len(driver.find_elements_by_xpath("//h2[contains(text(), '予約システムの流れとご利用規約')]")) > 0:
+
+        driver.find_elements_by_xpath("//div[@class='term-input']/button[contains(text(), '次へ')]")[0].click()
 
 # def open_hour(name, start="6", end="24"):
 #     logger.debug("-- 営業時間設定 --")
@@ -150,15 +200,28 @@ def select_course(driver, hour):
 
 #     print(minutes)
 
-objects = [{"name":"えの", "age":20}, {"name":"ひめか", "age":19}, {"name":"こむぎ", "age":20}, {"name":"さくら", "age":19}]
-day = "2022-04-24"
-time = {"start":"15:00", "end":"17:00"}
+# 事前情報の設定
+objects = [{"name":"みつば", "age":21}, {"name":"さく", "age":20}, {"name":"えの", "age":20}, {"name":"ひめか", "age":19}, {"name":"こむぎ", "age":20}, {"name":"さくら", "age":19}]
+day = "2022-04-25"
+time = {"start":"17:00", "end":"17:00"}
 times = create_time_range(start=time["start"], end=time["end"])
+hour = 50
+id = "poko576@yahoo.co.jp"
+password = "wa42phzz"
+
 booked = ""
 while booked != "Done":
     for object in objects:
         logger.debug("-- onject -- {}".format(object))
+
+        if booked == "Done":
+            break
+        
         for i in range(len(times)):
+
+            if booked == "Done":
+                break
+
             logger.debug('-- WebDriverの設定 --')
             # try:
             # DriverManager : https://jpdebug.com/p/2615980
@@ -197,6 +260,7 @@ while booked != "Done":
             element, xpath = check_open(driver=driver, day=day, time=times[int(i)])
             print("elements : ", element, " xpath : ", xpath)
             logger.debug('-- elements : ', element, " xpath : ", xpath, " --")
+            
             if element != None:
                 result = driver.find_element_by_xpath(xpath)
                 actions.move_to_element(result)
@@ -205,49 +269,53 @@ while booked != "Done":
                 sleep(5)
                 wait.until(EC.visibility_of_all_elements_located)
 
-                selected_time = driver.find_elements_by_xpath("//span[@class='disp-datetime']/div[@class='disp-time']")[0].text
-                print(selected_time)
-                logger.debug('-- selected time -- {}'.format(selected_time))
-                if selected_time != times[int(i)]:
-                    if datetime.datetime.strptime(selected_time, "%H:%M") > datetime.datetime.strptime(str(times[int(i)]), "%H:%M"):
-                        driver.find_elements_by_xpath("//a[@class='arrow-prev-btn']")[0].click()
-                    else:
-                        driver.find_elements_by_xpath("//a[@class='arrow-next-btn']")[0].click()
-                    selected_time_2 = driver.find_elements_by_xpath("//span[@class='disp-datetime']/div[@class='disp-time']")[0].text
-                    print(selected_time_2)
-                    logger.debug('-- selected time_2 -- {}'.format(selected_time_2))
-                # element == Noneやfind_object == Noneの場合の処理は？
-                wait.until(EC.visibility_of_all_elements_located)
-                sleep(5)
 
-
-
+                # 対象を選択する
                 logger.debug('-- select_object関数 --')
-                find_object = select_object(driver=driver, name=object["name"], age=object["age"])
+                find_object = select_object(driver=driver, wait=wait, name=object["name"], age=object["age"])
                 print(find_object)
-                if find_object != None:
-                    find_object[0].click()
+
+                # 対象が存在する場合
+                # コースの選択
+                logger.debug('-- select_course関数 --')
+                selected_course = select_course(driver=driver, wait=wait, hour=hour, find_object=find_object)
+                print(selected_course)
+
+                if selected_course != None:
+
+                    actions.move_to_element(selected_course[0])
+                    selected_course[0].click()
                     wait.until(EC.visibility_of_all_elements_located)
                     sleep(5)
+                    print('Course Select Completed')
+                    logger.debug('-- Course Select Completed --')
 
-                    select_course(driver=driver, hour=50)
+                    # 確定して次へ
+                    driver.find_elements_by_xpath("//div[@class='booking-footer']/button[@title='確定して次へ']")[0].click()
+                    wait.until(EC.visibility_of_all_elements_located)
+
+                    # ログインが要求されれば、ログインを行う
+                    login(driver=driver, id=id, password=password)
+                    wait.until(EC.visibility_of_all_elements_located)
+
+                    # 利用規約への同意    
+                    accept_terms(driver=driver)
+                    wait.until(EC.visibility_of_all_elements_located)
+
+                
+
 
                     booked = "Done"
-                    driver.close()
-                    print('Complete')
-                    logger.debug('Complete')
+
                         
-                elif find_object == None or find_object == []:
-                    driver.close()
-                    continue
+                    
+            driver.close()
+        
+
+    
 
 
-            else:
-                driver.close()
-                continue
-
-
-
+print('ALL COMPLETED')
 
 
 # BeautifulSoupでtable要素を取得するパターン（今回は使わない）
